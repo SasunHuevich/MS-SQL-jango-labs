@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    container_name: db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+      MSSQL_SA_PASSWORD: "StrongPass!123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+      - ./init-db:/docker-entrypoint-initdb.d
+    command: /opt/mssql/bin/sqlservr
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  back:
+    build: .
+    restart: always
+    container_name: back
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=sqlserver://sa:StrongPass!123@db:1433;database=bot_db;encrypt=false
+      - RUST_LOG=info
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+volumes:
+  mssql_data:

@@ -1,0 +1,8 @@
+services:
+  builder:
+    container_name: builder
+    image: rust:1.91-bullseye
+    working_dir: /back
+    volumes:
+      - .:/back
+    command: cargo build --release
