@@ -83,6 +83,7 @@ CREATE TABLE users (
     email NVARCHAR(150),
     avatar_id INT,
     role_id INT,
+    registred_at DATETIME2 DEFAULT SYSDATETIME(),
     FOREIGN KEY (avatar_id) REFERENCES picture(id),
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );

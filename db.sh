@@ -1,0 +1,1 @@
+docker exec -it db /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'StrongPass!123' -C

@@ -21,12 +21,11 @@ services:
 
   back:
     build: .
-    restart: always
     container_name: back
     depends_on:
       - db
     environment:
-      - DATABASE_URL=sqlserver://sa:StrongPass!123@db:1433;database=bot_db;encrypt=false
+      - DATABASE_URL=sqlserver://sa:StrongPass!123@db:1433?database=db  
       - RUST_LOG=info
     logging:
       driver: "json-file"
