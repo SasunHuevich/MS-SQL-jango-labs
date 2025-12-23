@@ -70,3 +70,62 @@ pub async fn seed_users(
 
     Ok(())
 }
+
+
+pub async fn seed_pictures(
+    pool: &Pool<Mssql>,
+    n: usize,
+) -> Result<(), sqlx::Error> {
+    let mut rng = rand::rng();
+
+    let type_ids: Vec<i32> = sqlx::query_scalar(
+        r#"
+        USE db;
+        SELECT id FROM dbo.picture_type
+        "#
+    )
+    .fetch_all(pool)
+    .await?;
+
+    if type_ids.is_empty() {
+        panic!("Таблица picture_type пуста");
+    }
+
+    const BATCH_SIZE: usize = 1_000;
+
+    for offset in (0..n).step_by(BATCH_SIZE) {
+        let mut tx = pool.begin().await?;
+
+        for _ in 0..BATCH_SIZE.min(n - offset) {
+            let type_id = *type_ids.choose(&mut rng).unwrap();
+
+            let url: String = format!(
+                "/opt/assistent/img/{}/{}",
+                type_id,
+                rng.random::<u32>()
+            );
+
+            sqlx::query(
+                r#"
+                USE db;
+                INSERT INTO dbo.picture (url, type_id)
+                VALUES (@p1, @p2)
+                "#
+            )
+            .bind(url)
+            .bind(type_id)
+            .execute(&mut tx)
+            .await?;
+        }
+
+        tx.commit().await?;
+
+        println!(
+            "Inserted {} / {} pictures",
+            (offset + BATCH_SIZE).min(n),
+            n
+        );
+    }
+
+    Ok(())
+}

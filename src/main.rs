@@ -13,5 +13,9 @@ async fn main() -> Result<(), sqlx::Error> {
         eprintln!("Seed failed: {e}");
     }
 
+    if let Err(e) = seed::seed_pictures(&db_pool, 30_000).await {
+        eprintln!("Seed failed: {e}");
+    }
+
     Ok(())
 }
