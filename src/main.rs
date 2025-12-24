@@ -23,53 +23,28 @@ async fn main() -> Result<(), sqlx::Error> {
     let quest_maps: i32 = quests * maps / 6;
 
 
-    if let Err(e) = seed::seed_users(&db_pool, users).await {
-        eprintln!("Seed failed: {e}");
+    macro_rules! try_seed {
+        ($name:expr, $func:expr $(, $args:expr)*) => {
+            if let Err(e) = $func(&db_pool $(, $args)*).await {
+                eprintln!("Seed failed for {}: {e}", $name);
+            } else {
+                println!("Seeding {} done", $name);
+            }
+        };
     }
 
-    if let Err(e) = seed::seed_pictures(&db_pool, pictures).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_traders(&db_pool, traders, pictures).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_items(&db_pool, items, pictures).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_quests(&db_pool, quests, pictures, traders).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_quest_rewards(&db_pool, quest_rewards, quests, items, traders).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_maps(&db_pool, maps, pictures).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_comments(&db_pool, comments, users, quests).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_map_markers(&db_pool, map_markers, maps, pictures).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_quest_refs(&db_pool, quest_refs, quests).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_user_complete_quests(&db_pool, completed_quests, users, quests).await {
-        eprintln!("Seed failed: {e}");
-    }
-
-    if let Err(e) = seed::seed_quest_map(&db_pool, quest_maps, quests, maps).await {
-        eprintln!("Seed failed: {e}");
-    }
+    try_seed!("users", seed::seed_users, users);
+    try_seed!("pictures", seed::seed_pictures, pictures);
+    try_seed!("traders", seed::seed_traders, traders, pictures);
+    try_seed!("items", seed::seed_items, items, pictures);
+    try_seed!("quests", seed::seed_quests, quests, pictures, traders);
+    try_seed!("quest_rewards", seed::seed_quest_rewards, quest_rewards, quests, items, traders);
+    try_seed!("maps", seed::seed_maps, maps, pictures);
+    try_seed!("comments", seed::seed_comments, comments, users, quests);
+    try_seed!("map_markers", seed::seed_map_markers, map_markers, maps, pictures);
+    try_seed!("quest_refs", seed::seed_quest_refs, quest_refs, quests);
+    try_seed!("user_complete_quests", seed::seed_user_complete_quests, completed_quests, users, quests);
+    try_seed!("quest_map", seed::seed_quest_map, quest_maps, quests, maps);
 
     Ok(())
 }
