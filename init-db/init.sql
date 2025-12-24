@@ -132,7 +132,6 @@ CREATE TABLE map_marker (
 CREATE TABLE quest_ref (
     quest_id INT NOT NULL,
     required_quest_id INT NOT NULL,
-    type NVARCHAR(50),
     PRIMARY KEY (quest_id, required_quest_id),
     FOREIGN KEY (quest_id) REFERENCES quest(id),
     FOREIGN KEY (required_quest_id) REFERENCES quest(id)
