@@ -25,7 +25,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=sqlserver://sa:StrongPass!123@db:1433?database=db  
+      - DATABASE_URL=sqlserver://sa:StrongPass%21123@db:1433/db
       - RUST_LOG=info
     logging:
       driver: "json-file"
