@@ -11,7 +11,7 @@ pub async fn seed_users(
 ) -> Result<(), sqlx::Error> {
     let mut rng = rand::rng();
 
-    let role_ids: Vec<i32> = sqlx::query_scalar("USE db; SELECT id FROM dbo.roles")
+    let role_ids: Vec<i32> = sqlx::query_scalar("SELECT id FROM dbo.roles")
         .fetch_all(pool)
         .await?;
 
@@ -47,7 +47,6 @@ pub async fn seed_users(
 
             sqlx::query(
                 r#"
-                USE db; INSERT INTO dbo.users
                 (username, password, email, role_id, registred_at)
                 VALUES (@p1, @p2, @p3, @p4, @p5)
                 "#
@@ -82,7 +81,6 @@ pub async fn seed_pictures(
 
     let type_ids: Vec<i32> = sqlx::query_scalar(
         r#"
-        USE db;
         SELECT id FROM dbo.picture_type
         "#
     )
@@ -110,7 +108,6 @@ pub async fn seed_pictures(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.picture (url, type_id)
                 VALUES (@p1, @p2)
                 "#
@@ -161,7 +158,6 @@ pub async fn seed_traders(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.trader (name, description, picture_id)
                 VALUES (@p1, @p2, @p3)
                 "#
@@ -213,7 +209,6 @@ pub async fn seed_items(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.item (name, description, picture_id)
                 VALUES (@p1, @p2, @p3)
                 "#
@@ -272,7 +267,6 @@ pub async fn seed_quests(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.quest
                     (name, description, picture_id, trader_id, required_level, changed_at)
                 VALUES
@@ -330,7 +324,6 @@ pub async fn seed_quest_rewards(
             
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.quest_reward
                     (quest_id, type, item_id, trader_id, amount, reputation_amount)
                 VALUES
@@ -388,7 +381,6 @@ pub async fn seed_maps(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.map (name, description, picture_id, difficulty)
                 VALUES (@p1, @p2, @p3, @p4)
                 "#
@@ -452,7 +444,6 @@ pub async fn seed_comments(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.comment
                     (text, author_id, rating, quest_id, changed_at)
                 VALUES (@p1, @p2, @p3, @p4, @p5)
@@ -517,7 +508,6 @@ pub async fn seed_map_markers(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.map_marker
                     (map_id, type, description, access_rule, picture_id, x, y)
                 VALUES (@p1, @p2, @p3, @p4, @p5, @p6, @p7)
@@ -576,7 +566,6 @@ pub async fn seed_quest_refs(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.quest_ref
                     (quest_id, required_quest_id)
                 VALUES (@p1, @p2)
@@ -630,7 +619,6 @@ pub async fn seed_user_complete_quests(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.user_complete_quest
                     (user_id, quest_id)
                 VALUES (@p1, @p2)
@@ -684,7 +672,6 @@ pub async fn seed_quest_map(
 
             sqlx::query(
                 r#"
-                USE db;
                 INSERT INTO dbo.quest_map
                     (quest_id, map_id)
                 VALUES (@p1, @p2)
