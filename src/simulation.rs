@@ -22,9 +22,15 @@ pub async fn spawn_virtual_users(pool: &Pool<Mssql>, count: usize) -> Vec<JoinHa
                             .fetch_one(&pool).await.unwrap_or(1);
                         let user_id = (rand::random::<u32>() % max_id as u32) as i32 + 1;
 
-                        let res = sqlx::query("SELECT * FROM users WHERE id=@p1")
-                            .bind(user_id)
-                            .fetch_one(&pool).await;
+                        let res = sqlx::query(
+                            "SELECT id, username, email, registred_at
+                            FROM users
+                            WHERE id = @p1"
+                        )
+                        .bind(user_id)
+                        .fetch_one(&pool)
+                        .await;
+
                         match res {
                             Ok(_) => println!("[OK] Пользователь с id={} выбран", user_id),
                             Err(e) => eprintln!("[ERROR] Не удалось выбрать пользователя с id={}: {}", user_id, e),
