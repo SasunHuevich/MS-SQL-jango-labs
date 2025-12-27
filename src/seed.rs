@@ -47,6 +47,7 @@ pub async fn seed_users(
 
             sqlx::query(
                 r#"
+                INSERT INTO dbo.users
                 (username, password, email, role_id, registred_at)
                 VALUES (@p1, @p2, @p3, @p4, @p5)
                 "#
