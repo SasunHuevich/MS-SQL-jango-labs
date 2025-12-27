@@ -15,13 +15,13 @@ async fn main() -> Result<(), sqlx::Error> {
     let db_pool = db::init_db().await;
 
     println!("SEED GENERATE");
-    //seed::seeds_generate(&db_pool).await;
+    // seed::seeds_generate(&db_pool).await;
 
     println!("SIMULATION");
     let mut handlers = simulation::spawn_virtual_users(&db_pool, 50).await;
 
     for handle in handlers {
-        let _ = handle.await;
+        let _ =handle.await;
     }
 
     println!("OK");
