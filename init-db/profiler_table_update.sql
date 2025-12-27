@@ -29,6 +29,12 @@ BEGIN
         Duration,
         Reads,
         Writes,
+        ScanCount,
+        PhysicalReads,
+        ReadAheadReads,
+        LOBLogicalReads,
+        LOBPhysicalReads,
+        LOBReadAheadReads,
         StartTime
     )
     SELECT
@@ -38,6 +44,12 @@ BEGIN
         evt.value('(data[@name="duration"]/value)[1]', 'bigint'),
         evt.value('(data[@name="logical_reads"]/value)[1]', 'bigint'),
         evt.value('(data[@name="writes"]/value)[1]', 'bigint'),
+        evt.value('(data[@name="scan_count"]/value)[1]', 'bigint'),
+        evt.value('(data[@name="physical_reads"]/value)[1]', 'bigint'),
+        evt.value('(data[@name="read_ahead_reads"]/value)[1]', 'bigint'),
+        evt.value('(data[@name="lob_logical_reads"]/value)[1]', 'bigint'),
+        evt.value('(data[@name="lob_physical_reads"]/value)[1]', 'bigint'),
+        evt.value('(data[@name="lob_read_ahead_reads"]/value)[1]', 'bigint'),
         evt.value('@timestamp', 'datetime2')
     FROM @xml.nodes('//event') AS X(evt);
 END;
