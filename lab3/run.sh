@@ -17,6 +17,6 @@ echo "Init query_profiler..."
 docker exec -it db bash /docker-entrypoint-initdb.d/query_profile.sh
 
 echo "Starting back container..."
-docker compose up -d back
+LAB_MODE=lab3 docker compose up -d back
 
 echo "Done!"

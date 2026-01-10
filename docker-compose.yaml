@@ -27,6 +27,7 @@ services:
     environment:
       - DATABASE_URL=sqlserver://sa:StrongPass%21123@db:1433/db
       - RUST_LOG=info
+      - LAB_MODE=${LAB_MODE:-EMPTY}
     logging:
       driver: "json-file"
       options:
