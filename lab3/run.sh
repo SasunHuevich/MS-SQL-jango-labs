@@ -10,11 +10,11 @@ docker compose build
 echo "Starting db container..."
 docker compose up -d db
 
-echo "Sleep 10..."
-sleep 10
+echo "Sleep 15..."
+sleep 15
 
-echo "Init query_profiler..."
-docker exec -it db bash /docker-entrypoint-initdb.d/query_profile.sh
+# echo "Init query_profiler..."
+# docker exec -it db bash /docker-entrypoint-initdb.d/query_profile.sh
 
 echo "Starting back container..."
 LAB_MODE=lab3 docker compose up -d back

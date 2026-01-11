@@ -152,3 +152,6 @@ CREATE TABLE quest_map (
     FOREIGN KEY (quest_id) REFERENCES quest(id),
     FOREIGN KEY (map_id) REFERENCES map(id)
 );
+
+CREATE NONCLUSTERED INDEX IX_comment_author_id 
+ON comment (author_id);
