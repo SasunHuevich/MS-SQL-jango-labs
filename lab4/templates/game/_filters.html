@@ -1,0 +1,7 @@
+{% if filter %}
+<form method="get" class="filter-form card">
+    {{ filter.form.as_p }}
+    <button type="submit" class="btn">Фильтровать</button>
+    <a href="?" class="btn btn-secondary">Сбросить</a>
+</form>
+{% endif %}

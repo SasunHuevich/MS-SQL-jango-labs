@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Игровая БД{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f5;
+            color: #18181b;
+            line-height: 1.5;
+        }
+        header {
+            background: #18181b;
+            color: #fafafa;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        header a { color: #a1a1aa; text-decoration: none; margin-right: 1.25rem; }
+        header a:hover { color: #fff; }
+        .user-bar { color: #d4d4d8; font-size: 0.9rem; }
+        .user-bar form { display: inline; }
+        .user-bar button {
+            background: transparent;
+            border: 1px solid #52525b;
+            color: #e4e4e7;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        main { max-width: 960px; margin: 0 auto; padding: 2rem; }
+        h1 { margin-top: 0; }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,.08);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #e4e4e7; }
+        th { font-weight: 600; color: #52525b; }
+        a { color: #2563eb; }
+        .muted { color: #71717a; font-size: 0.9rem; }
+        .stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .stat { background: #fff; padding: 1rem 1.5rem; border-radius: 8px; min-width: 140px; }
+        .stat strong { display: block; font-size: 1.75rem; }
+        .messages { list-style: none; padding: 0; margin: 0 0 1rem; }
+        .messages li { padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 0.5rem; }
+        .messages .success { background: #dcfce7; color: #166534; }
+        .messages .error { background: #fee2e2; color: #991b1b; }
+        .messages .info { background: #e0e7ff; color: #3730a3; }
+        .btn {
+            display: inline-block;
+            padding: 0.4rem 0.9rem;
+            background: #2563eb;
+            color: #fff !important;
+            border-radius: 6px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-secondary { background: #52525b; }
+        .btn-danger { background: #dc2626; }
+        .toolbar { margin-bottom: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+        .filter-form label { margin-right: 0.75rem; }
+        .filter-form input, .filter-form select { margin-left: 0.25rem; }
+        .pagination { margin-top: 1rem; }
+        .pagination a { margin-right: 0.75rem; }
+        form p { margin-bottom: 0.75rem; }
+        form label { display: block; font-weight: 500; margin-bottom: 0.25rem; }
+        form input, form select, form textarea { width: 100%; max-width: 480px; padding: 0.4rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'home' %}">Главная</a>
+            <a href="{% url 'quest_list' %}">Квесты</a>
+            <a href="{% url 'map_list' %}">Карты</a>
+            <a href="{% url 'trader_list' %}">Торговцы</a>
+            <a href="{% url 'comment_list' %}">Комментарии</a>
+            <a href="/admin/">Админка Django</a>
+        </nav>
+        <div class="user-bar">
+            {% if current_user %}
+                <span>{{ current_user.username }} ({{ current_user.role.name }})</span>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Выйти</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Войти</a>
+                <a href="{% url 'register' %}">Регистрация</a>
+            {% endif %}
+        </div>
+    </header>
+    <main>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

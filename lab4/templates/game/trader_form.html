@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Редактировать{% else %}Новый{% endif %} торговец{% endblock %}
+
+{% block content %}
+<h1>{% if object %}Редактировать торговца{% else %}Новый торговец{% endif %}</h1>
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Сохранить</button>
+        <a href="{% url 'trader_list' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

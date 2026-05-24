@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Торговцы{% endblock %}
+
+{% block content %}
+<h1>Торговцы</h1>
+<div class="toolbar">
+    {% if can_write %}<a href="{% url 'trader_create' %}" class="btn">+ Добавить</a>{% endif %}
+</div>
+{% include "game/_filters.html" %}
+{% if traders %}
+<table>
+    <thead><tr><th>Имя</th><th>Описание</th>{% if can_write %}<th></th>{% endif %}</tr></thead>
+    <tbody>
+        {% for trader in traders %}
+        <tr>
+            <td>{{ trader.name }}</td>
+            <td>{{ trader.description|default:"—"|truncatewords:15 }}</td>
+            {% if can_write %}
+            <td>
+                <a href="{% url 'trader_update' trader.pk %}">Изменить</a> ·
+                <a href="{% url 'trader_delete' trader.pk %}">Удалить</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include "game/_pagination.html" %}
+{% else %}
+<p class="muted">Ничего не найдено.</p>
+{% endif %}
+{% endblock %}

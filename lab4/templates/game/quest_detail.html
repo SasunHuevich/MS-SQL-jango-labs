@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ quest.name }}{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'quest_list' %}">← К квестам</a></p>
+
+<div class="card">
+    <h1>{{ quest.name }}</h1>
+    {% if can_write %}
+    <p>
+        <a href="{% url 'quest_update' quest.pk %}">Изменить</a> ·
+        <a href="{% url 'quest_delete' quest.pk %}">Удалить</a>
+    </p>
+    {% endif %}
+    <p class="muted">Уровень: {{ quest.required_level }}
+        {% if quest.trader %} · Торговец: {{ quest.trader }}{% endif %}
+    </p>
+    {% if quest.description %}<p>{{ quest.description }}</p>{% endif %}
+</div>
+
+{% if quest.rewards.all %}
+<div class="card">
+    <h2>Награды</h2>
+    <table>
+        <thead><tr><th>Тип</th><th>Предмет</th><th>Кол-во</th></tr></thead>
+        <tbody>
+            {% for reward in quest.rewards.all %}
+            <tr>
+                <td>{{ reward.type }}</td>
+                <td>{{ reward.item|default:"—" }}</td>
+                <td>{{ reward.amount|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if quest.comments.all %}
+<div class="card">
+    <h2>Комментарии</h2>
+    {% for comment in quest.comments.all %}
+    <p><strong>{{ comment.author }}</strong>: {{ comment.text }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

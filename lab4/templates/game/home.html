@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<h1>Игровая база данных</h1>
+
+{% if current_user %}
+<p class="muted">
+    Вы вошли как <strong>{{ current_user.username }}</strong>
+    (роль: {{ current_user.role.name|default:"—" }}).
+    {% if can_write %}Доступно создание и изменение данных.{% else %}Только просмотр и комментарии.{% endif %}
+</p>
+{% endif %}
+
+<div class="stats">
+    <div class="stat"><strong>{{ quest_count }}</strong><a href="{% url 'quest_list' %}">Квестов</a></div>
+    <div class="stat"><strong>{{ map_count }}</strong><a href="{% url 'map_list' %}">Карт</a></div>
+    <div class="stat"><strong>{{ trader_count }}</strong><a href="{% url 'trader_list' %}">Торговцев</a></div>
+</div>
+{% endblock %}

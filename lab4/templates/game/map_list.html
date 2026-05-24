@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Карты{% endblock %}
+
+{% block content %}
+<h1>Карты</h1>
+
+{% include "game/_filters.html" %}
+
+{% if maps %}
+<table>
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Сложность</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for map in maps %}
+        <tr>
+            <td><a href="{% url 'map_detail' map.pk %}">{{ map.name }}</a></td>
+            <td>{{ map.difficulty|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include "game/_pagination.html" %}
+{% else %}
+<p class="muted">Карт пока нет.</p>
+{% endif %}
+{% endblock %}

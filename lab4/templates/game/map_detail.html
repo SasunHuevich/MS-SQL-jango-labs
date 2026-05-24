@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ game_map.name }}{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'map_list' %}">← К картам</a></p>
+
+<div class="card">
+    <h1>{{ game_map.name }}</h1>
+    {% if game_map.difficulty is not None %}
+    <p class="muted">Сложность: {{ game_map.difficulty }}</p>
+    {% endif %}
+    {% if game_map.description %}
+    <p>{{ game_map.description }}</p>
+    {% endif %}
+</div>
+
+{% if game_map.markers.all %}
+<div class="card">
+    <h2>Маркеры</h2>
+    <table>
+        <thead>
+            <tr><th>Тип</th><th>X</th><th>Y</th><th>Описание</th></tr>
+        </thead>
+        <tbody>
+            {% for marker in game_map.markers.all %}
+            <tr>
+                <td>{{ marker.type|default:"—" }}</td>
+                <td>{{ marker.x }}</td>
+                <td>{{ marker.y }}</td>
+                <td>{{ marker.description|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if game_map.quest_maps.all %}
+<div class="card">
+    <h2>Связанные квесты</h2>
+    <ul>
+        {% for qm in game_map.quest_maps.all %}
+        <li><a href="{% url 'quest_detail' qm.quest.pk %}">{{ qm.quest }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}

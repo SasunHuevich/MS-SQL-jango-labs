@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Квесты{% endblock %}
+
+{% block content %}
+<h1>Квесты</h1>
+
+<div class="toolbar">
+    {% if can_write %}
+    <a href="{% url 'quest_create' %}" class="btn">+ Добавить квест</a>
+    {% endif %}
+</div>
+
+{% include "game/_filters.html" %}
+
+{% if quests %}
+<table>
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Уровень</th>
+            <th>Торговец</th>
+            {% if can_write %}<th></th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for quest in quests %}
+        <tr>
+            <td><a href="{% url 'quest_detail' quest.pk %}">{{ quest.name }}</a></td>
+            <td>{{ quest.required_level }}</td>
+            <td>{{ quest.trader|default:"—" }}</td>
+            {% if can_write %}
+            <td>
+                <a href="{% url 'quest_update' quest.pk %}">Изменить</a> ·
+                <a href="{% url 'quest_delete' quest.pk %}">Удалить</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include "game/_pagination.html" %}
+{% else %}
+<p class="muted">Ничего не найдено.</p>
+{% endif %}
+{% endblock %}

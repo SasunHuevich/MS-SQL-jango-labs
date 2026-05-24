@@ -35,13 +35,12 @@ services:
         max-file: "5"
 
   django:
-    build:
-      context: .
-      dockerfile: Dockerfile.django
+    build: ./lab4/
     container_name: django
-    command: python manage.py runserver 0.0.0.0:8000
+    restart: always
+    command: "python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./lab4:/lab4
+      - ./lab4:/app
     ports:
       - "8000:8000"
     depends_on:
@@ -51,6 +50,13 @@ services:
       - DB_NAME=db
       - DB_USER=sa
       - DB_PASSWORD=StrongPass!123
+      - DB_PORT=1433
+      - PYTHONUNBUFFERED=1
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
 
 volumes:
   mssql_data:

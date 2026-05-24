@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Комментарии{% endblock %}
+
+{% block content %}
+<h1>Комментарии</h1>
+<div class="toolbar">
+    <a href="{% url 'comment_create' %}" class="btn">+ Добавить комментарий</a>
+</div>
+{% include "game/_filters.html" %}
+{% if comments %}
+<table>
+    <thead>
+        <tr><th>Квест</th><th>Автор</th><th>Рейтинг</th><th>Текст</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for comment in comments %}
+        <tr>
+            <td>{{ comment.quest }}</td>
+            <td>{{ comment.author }}</td>
+            <td>{{ comment.rating|default:"—" }}</td>
+            <td>{{ comment.text|truncatewords:12 }}</td>
+            <td>
+                {% if can_write %}
+                <a href="{% url 'comment_update' comment.pk %}">Изменить</a> ·
+                <a href="{% url 'comment_delete' comment.pk %}">Удалить</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include "game/_pagination.html" %}
+{% else %}
+<p class="muted">Комментариев нет.</p>
+{% endif %}
+{% endblock %}
